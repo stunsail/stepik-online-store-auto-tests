@@ -1,7 +1,35 @@
 import pytest
+import faker
 from pages.product_page import ProductPage
 from pages.login_page import LoginPage
 from pages.basket_page import BasketPage
+
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse = True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/accounts/login/"
+        page = LoginPage(browser, link)
+        page.open()
+        f = faker.Faker()
+        email = f.email()
+        password = "XqfgEjheN"
+        page.register_new_user(email, password)
+        page.should_be_authorized_user()
+        
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_current_product_to_basket()
+        page.solve_quiz_and_get_code()
+        page.should_match_product_name()
+        page.should_match_product_price()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
 
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
@@ -30,7 +58,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page.solve_quiz_and_get_code()
     page.should_not_be_success_message()
 
-def test_cuest_cant_see_success_message(browser):
+def test_guest_cant_see_success_message(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
