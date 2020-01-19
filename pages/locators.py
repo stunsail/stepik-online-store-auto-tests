@@ -31,10 +31,5 @@ class ProductPageLocators():
     PRODUCT_NAME_MESSAGE = (By.CSS_SELECTOR, ".alertinner strong:first-of-type")
     PRODUCT_PRICE_MESSAGE = (By.CSS_SELECTOR, ".alertinner > p > strong")
     
-    
-#Корзина .basket-mini.pull-right.hidden-xs
-#Название продукта .product_main h1
-#Сообщение о названии .alertinner strong:first-of-type
-#Сообщение о цене .alertinner strong:last-of-type
 
     
